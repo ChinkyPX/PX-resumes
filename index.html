@@ -1,225 +1,488 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Upload Resume</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Upload Resume — ProlificXpert Style</title>
+<style>
+  :root{
+    --blue:#007BFF;
+    --green:#28a745;
+    --grad1: #0ea5a4; /* teal */
+    --grad2: #007BFF; /* blue */
+    --card:#ffffff;
+    --muted:#6b7280;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    font-family: "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
+    margin:0;
+    background: linear-gradient(180deg,#f4f8ff 0%,#ffffff 60%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:28px;
+    color:#0f172a;
+  }
 
-    body {
-      font-family: "Segoe UI", sans-serif;
-      background: #ffffff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-      color: #0a0a0a;
-    }
+  /* Page wrapper */
+  .stage{
+    width:100%;
+    max-width:980px;
+    margin:auto;
+  }
 
-    .container {
-      width: 100%;
-      max-width: 480px;
-      background: #ffffff;
-      padding: 35px;
-      border-radius: 14px;
-      box-shadow: 0 0 25px rgba(0,0,0,0.08);
-      position: relative;
-    }
+  /* Hero header */
+  .hero{
+    text-align:center;
+    margin-bottom:22px;
+  }
+  .hero h1{
+    margin:0;
+    font-size:28px;
+    line-height:1.05;
+    font-weight:800;
+    background: linear-gradient(90deg,var(--grad1),var(--grad2));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero p{
+    margin:10px 0 0;
+    color:var(--muted);
+    font-size:14px;
+  }
 
-    h2 {
-      text-align: center;
-      margin-bottom: 25px;
-      font-size: 26px;
-      color: #007BFF;
-      font-weight: 700;
-    }
+  /* Card */
+  .card{
+    background:var(--card);
+    border-radius:var(--radius);
+    padding:26px;
+    box-shadow: 0 12px 40px rgba(14, 22, 47, 0.08);
+    position:relative;
+    overflow:visible;
+    border-top:6px solid;
+    border-image: linear-gradient(90deg,var(--grad1),var(--grad2)) 1;
+  }
 
-    .form-group {
-      margin-bottom: 22px;
-    }
+  /* form layout */
+  form .grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:18px 20px;
+    align-items:start;
+  }
 
-    label {
-      font-size: 15px;
-      margin-bottom: 5px;
-      display: block;
-      font-weight: 600;
-      color: #1f8b2c;
-    }
+  /* Full width rows (use .full) */
+  .full{grid-column:1/-1}
 
-    input[type="text"],
-    input[type="email"],
-    input[type="number"],
-    input[type="file"] {
-      width: 100%;
-      padding: 13px 15px;
-      border-radius: 10px;
-      border: 1px solid #cfcfcf;
-      font-size: 15px;
-      background: #fff;
-      transition: 0.25s ease;
-    }
+  .section-title{
+    grid-column:1/-1;
+    margin:6px 0 12px;
+    font-weight:700;
+    color:#0f172a;
+    font-size:15px;
+  }
+  .help{color:var(--muted); font-size:13px; margin-bottom:8px}
 
-    input:focus {
-      border-color: #007BFF;
-      box-shadow: 0 0 8px rgba(0,123,255,0.3);
-      outline: none;
-    }
+  .field{
+    position:relative;
+  }
 
-    button {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(45deg, #28a745, #007bff);
-      border: none;
-      border-radius: 10px;
-      color: white;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s ease-in-out;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
+  .field label{
+    display:block;
+    margin-bottom:8px;
+    font-size:14px;
+    font-weight:600;
+    color: #0b6f4a; /* green tone for labels */
+  }
 
-    button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.22);
-    }
+  /* input with icon */
+  .input-wrap{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#fbfbff;
+    border:1px solid #e6e9ef;
+    padding:10px 12px;
+    border-radius:10px;
+    transition:box-shadow .18s, border-color .18s, transform .08s;
+  }
+  .input-wrap svg{width:18px;height:18px;flex:0 0 18px;opacity:.85}
+  .input-wrap input, .input-wrap textarea, .input-wrap select{
+    border:0;
+    outline:0;
+    font-size:15px;
+    flex:1;
+    background:transparent;
+    color:inherit;
+    padding:6px 0;
+  }
+  .input-wrap:focus-within{
+    box-shadow:0 6px 20px rgba(2,132,199,0.12);
+    border-color:var(--blue);
+    transform:translateY(-1px);
+  }
 
-    .success-check {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      font-size: 70px;
-      font-weight: bold;
-      color: #28a745;
-      opacity: 0;
-      z-index: 10;
-    }
+  textarea{min-height:54px;resize:vertical;padding-top:6px}
 
-    @keyframes check-animate {
-      0%   { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-      50%  { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
-      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    }
+  .file-preview{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    background:linear-gradient(180deg,#fbfffb,#ffffff);
+    border:1px dashed #dbe7df;
+    padding:12px 14px;
+    border-radius:10px;
+    color:#064e23;
+    font-weight:600;
+    font-size:14px;
+  }
+  .file-meta{display:flex;align-items:center;gap:10px}
+  .file-meta small{font-size:12px;color:var(--muted);font-weight:500}
 
-  </style>
+  /* Submit */
+  .actions{grid-column:1/-1; margin-top:6px}
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+    justify-content:center;
+    width:100%;
+    background: linear-gradient(90deg,var(--grad1),var(--grad2));
+    color:white;
+    border:0;
+    padding:14px 16px;
+    border-radius:12px;
+    font-weight:700;
+    font-size:16px;
+    box-shadow: 0 8px 28px rgba(3,102,214,0.12);
+    cursor:pointer;
+    transition:transform .14s, box-shadow .14s, opacity .12s;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn[disabled]{opacity:.7;cursor:default;transform:none}
+
+  .spinner{
+    width:18px;height:18px;border-radius:50%;
+    border:2px solid rgba(255,255,255,0.28);
+    border-top-color:rgba(255,255,255,0.98);
+    animation:spin .9s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* Success modal */
+  .modal-backdrop{
+    position:fixed;inset:0;background:rgba(7,12,20,0.45);display:flex;align-items:center;justify-content:center;z-index:60;opacity:0;pointer-events:none;transition:opacity .18s;
+  }
+  .modal-backdrop.show{opacity:1;pointer-events:all}
+  .modal{
+    width:100%;max-width:520px;background:white;border-radius:12px;padding:22px;box-shadow:0 20px 60px rgba(2,6,23,0.2);text-align:center;
+  }
+  .modal h3{margin:0 0 8px;font-size:20px;color:#064e23}
+  .modal p{color:var(--muted);margin:0 0 14px}
+  .link{display:inline-block;background:linear-gradient(90deg,var(--grad1),var(--grad2));color:white;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700}
+
+  /* responsive */
+  @media (max-width:860px){
+    .grid{grid-template-columns:1fr}
+    .hero h1{font-size:22px}
+  }
+</style>
 </head>
-
 <body>
+  <div class="stage">
+    <div class="hero">
+      <h1>Upload Your Resume</h1>
+      <p>Quickly submit your profile — our talent team will review and get back to you.</p>
+    </div>
 
-  <div class="container">
-    <h2>Upload Your Resume</h2>
+    <div class="card" role="region" aria-label="Resume upload form">
+      <form id="uploadForm" autocomplete="off">
+        <div class="grid">
 
-    <form id="uploadForm">
+          <div class="section-title">Personal Info</div>
 
-      <div class="form-group">
-        <label>Name</label>
-        <input type="text" id="name" required />
-      </div>
+          <div class="field">
+            <label for="name">Full name</label>
+            <div class="input-wrap">
+              <!-- user icon -->
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-4 0-8 2-8 4v1h16v-1c0-2-4-4-8-4z" fill="#1f2937"/></svg>
+              <input id="name" name="name" type="text" placeholder="e.g. Priya Sharma" required />
+            </div>
+          </div>
 
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="email" required />
-      </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <div class="input-wrap">
+              <!-- mail icon -->
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 18.5 4h-13A2.5 2.5 0 0 0 3 6.5zM5 7l6.5 4.5L18 7" stroke="#1f2937" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <input id="email" name="email" type="email" placeholder="you@company.com" required />
+            </div>
+          </div>
 
-      <div class="form-group">
-        <label>Phone</label>
-        <input type="text" id="phone" required />
-      </div>
+          <div class="field">
+            <label for="phone">Phone</label>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M21 16.5v3a1 1 0 0 1-1 1c-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3a1 1 0 0 1 1 .8l.8 3a1 1 0 0 1-.3.9L8 7.8a11 11 0 0 0 8.2 8.2l1.4-1.5a1 1 0 0 1 .9-.3l3 .8c.4 0 .8.5.8 1z" fill="#1f2937"/></svg>
+              <input id="phone" name="phone" type="text" placeholder="+91 98765 43210" required />
+            </div>
+          </div>
 
-      <div class="form-group">
-        <label>Location</label>
-        <input type="text" id="location" required />
-      </div>
+          <div class="field">
+            <label for="location">Location</label>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7z" fill="#1f2937"/></svg>
+              <input id="location" name="location" type="text" placeholder="City, State (e.g. Aligarh, UP)" required />
+            </div>
+          </div>
 
-      <div class="form-group">
-        <label>Total Experience (Years)</label>
-        <input type="number" id="total_experience" required />
-      </div>
+          <div class="section-title">Experience</div>
 
-      <div class="form-group">
-        <label>Relevant Experience (Years)</label>
-        <input type="number" id="relevant_experience" required />
-      </div>
+          <div class="field">
+            <label for="total_experience">Total Experience (Years)</label>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" aria-hidden><path d="M12 2v6l4 2" fill="#1f2937"/></svg>
+              <input id="total_experience" name="total_experience" type="number" placeholder="e.g. 5" min="0" step="0.1" required />
+            </div>
+          </div>
 
-      <div class="form-group">
-        <label>Skills</label>
-        <input type="text" id="skills" required />
-      </div>
+          <div class="field">
+            <label for="relevant_experience">Relevant Experience (Years)</label>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" aria-hidden><path d="M12 2v6l4 2" fill="#1f2937"/></svg>
+              <input id="relevant_experience" name="relevant_experience" type="number" placeholder="e.g. 3" min="0" step="0.1" required />
+            </div>
+          </div>
 
-      <div class="form-group">
-        <label>Current CTC (Annual)</label>
-        <input type="number" id="current_ctc" required />
-      </div>
+          <div class="full field">
+            <label for="skills">Skills</label>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" aria-hidden><path d="M12 2l3 6 6 .5-4.5 4 1 6-5.5-3-5.5 3 1-6L3 8.5 9 8z" fill="#1f2937"/></svg>
+              <input id="skills" name="skills" type="text" placeholder="e.g. Manual testing, Selenium, SQL" required />
+            </div>
+          </div>
 
-      <div class="form-group">
-        <label>Expected CTC (Annual)</label>
-        <input type="number" id="expected_ctc" required />
-      </div>
+          <div class="section-title">Salary</div>
 
-      <div class="form-group">
-        <label>Upload Resume</label>
-        <input type="file" id="file" required />
-      </div>
+          <div class="field">
+            <label for="current_ctc">Current CTC (Annual)</label>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" aria-hidden><path d="M12 2v20M5 7h14" stroke="#1f2937" stroke-width="1.2" stroke-linecap="round"/></svg>
+              <input id="current_ctc" name="current_ctc" type="number" min="0" step="0.01" placeholder="e.g. 600000" required />
+            </div>
+          </div>
 
-      <button type="submit">Submit</button>
-    </form>
+          <div class="field">
+            <label for="expected_ctc">Expected CTC (Annual)</label>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" aria-hidden><path d="M12 2v20M5 7h14" stroke="#1f2937" stroke-width="1.2" stroke-linecap="round"/></svg>
+              <input id="expected_ctc" name="expected_ctc" type="number" min="0" step="0.01" placeholder="e.g. 900000" required />
+            </div>
+          </div>
 
-    <div class="success-check" id="successCheck">✔</div>
+          <div class="section-title full">Resume</div>
+
+          <div class="full field">
+            <label for="file">Upload Resume (PDF, DOCX)</label>
+            <div class="input-wrap" style="justify-content:space-between;gap:12px;">
+              <div style="display:flex;gap:12px;align-items:center;flex:1">
+                <svg viewBox="0 0 24 24" aria-hidden><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8z" fill="#1f2937"/></svg>
+                <div style="flex:1">
+                  <div style="font-weight:600;color:#0b6f4a">Choose file or drag here</div>
+                  <div style="font-size:12px;color:var(--muted)">Accepted: .pdf, .doc, .docx (max 5MB)</div>
+                </div>
+              </div>
+              <input id="file" name="file" type="file" accept=".pdf,.doc,.docx" style="opacity:0;position:absolute;right:16px;bottom:12px;cursor:pointer;height:40px;width:120px" required />
+              <button type="button" id="chooseBtn" style="border-radius:10px;padding:8px 12px;border:0;background:#eef9f0;color:var(--green);font-weight:700;cursor:pointer">Browse</button>
+            </div>
+            <div id="previewArea" style="margin-top:12px;display:none"></div>
+          </div>
+
+          <div class="actions">
+            <button id="submitBtn" class="btn" type="submit">
+              <span id="btnLabel">🚀 Submit Application</span>
+              <span id="btnSpinner" style="display:none;margin-left:6px" class="spinner" aria-hidden></span>
+            </button>
+          </div>
+
+        </div>
+      </form>
+    </div>
   </div>
 
-  <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzWDK_-yw4PHAwgptybBVwYVc2Y323vQQzfEPYQk-eMbIIQIDGwJlkYWFUoLX9RTZbz/exec";
-    const successCheck = document.getElementById("successCheck");
+  <!-- success modal -->
+  <div id="modal" class="modal-backdrop" role="dialog" aria-hidden="true">
+    <div class="modal" role="document" aria-labelledby="modalTitle">
+      <h3 id="modalTitle">Resume uploaded successfully</h3>
+      <p>Thanks — our team will review your profile and contact you soon.</p>
+      <a id="fileLink" class="link" target="_blank" rel="noopener">Open Resume</a>
+      <div style="margin-top:12px"><button onclick="closeModal()" style="margin-top:12px;padding:8px 12px;border-radius:8px;border:1px solid #e6eef9;background:#fff;cursor:pointer">Close</button></div>
+    </div>
+  </div>
 
-    document.getElementById("uploadForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
+<script>
+(function(){
+  const scriptURL = "https://script.google.com/macros/s/AKfycbzWDK_-yw4PHAwgptybBVwYVc2Y323vQQzfEPYQk-eMbIIQIDGwJlkYWFUoLX9RTZbz/exec"; // replace if needed
+  const form = document.getElementById('uploadForm');
+  const fileInput = document.getElementById('file');
+  const chooseBtn = document.getElementById('chooseBtn');
+  const previewArea = document.getElementById('previewArea');
+  const submitBtn = document.getElementById('submitBtn');
+  const btnSpinner = document.getElementById('btnSpinner');
+  const btnLabel = document.getElementById('btnLabel');
+  const modalBackdrop = document.getElementById('modal');
+  const fileLink = document.getElementById('fileLink');
 
-      const fileInput = document.getElementById("file").files[0];
+  // open native file selector when using custom browse
+  chooseBtn.addEventListener('click', ()=> fileInput.click());
+
+  // Drag & drop support on card
+  const card = document.querySelector('.card');
+  ['dragenter','dragover'].forEach(evt=> {
+    card.addEventListener(evt, e=>{ e.preventDefault(); card.style.opacity = '0.98'; }, false);
+  });
+  ['dragleave','drop'].forEach(evt=>{
+    card.addEventListener(evt, e=>{ e.preventDefault(); card.style.opacity = '1'; }, false);
+  });
+  card.addEventListener('drop', e=>{
+    if(e.dataTransfer.files && e.dataTransfer.files.length){
+      fileInput.files = e.dataTransfer.files;
+      handleFileSelect();
+    }
+  });
+
+  // show preview
+  fileInput.addEventListener('change', handleFileSelect);
+  function handleFileSelect(){
+    const f = fileInput.files[0];
+    if(!f) { previewArea.style.display='none'; previewArea.innerHTML=''; return; }
+    const maxMB = 5;
+    const sizeMB = f.size / (1024*1024);
+    if(sizeMB > maxMB){
+      alert('File too large. Please upload a file under 5MB.');
+      fileInput.value = '';
+      previewArea.style.display='none'; previewArea.innerHTML='';
+      return;
+    }
+    const ext = f.name.split('.').pop().toLowerCase();
+    if(!['pdf','doc','docx'].includes(ext)){
+      alert('Invalid file type. Only PDF, DOC or DOCX allowed.');
+      fileInput.value = '';
+      previewArea.style.display='none'; previewArea.innerHTML='';
+      return;
+    }
+    previewArea.style.display='block';
+    previewArea.innerHTML = `
+      <div class="file-preview">
+        <div class="file-meta">
+          <svg viewBox="0 0 24 24" width="20" height="20"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" fill="#0b6f4a"/></svg>
+          <div>
+            <div style="font-weight:700">${escapeHtml(f.name)}</div>
+            <small>${(sizeMB).toFixed(2)} MB • ${ext.toUpperCase()}</small>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button id="removeFile" type="button" style="background:transparent;border:0;color:var(--muted);cursor:pointer">Remove</button>
+        </div>
+      </div>
+    `;
+    document.getElementById('removeFile').addEventListener('click', ()=>{
+      fileInput.value = '';
+      previewArea.style.display='none';
+      previewArea.innerHTML='';
+    });
+  }
+
+  function escapeHtml(s){ return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
+
+  // form submit
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+
+    // Basic client validations before uploading
+    if(!fileInput.files[0]){
+      alert('Please attach your resume file.');
+      return;
+    }
+
+    // show loading UI
+    submitBtn.setAttribute('disabled','');
+    btnSpinner.style.display = 'inline-block';
+    btnLabel.textContent = 'Uploading...';
+
+    try {
+      const f = fileInput.files[0];
       const reader = new FileReader();
+      reader.readAsDataURL(f);
+      reader.onload = async function(){
+        const base64 = reader.result.split(',')[1];
 
-      reader.onload = async function () {
-        try {
-          const base64Data = reader.result.split(",")[1];
-          const formData = new FormData();
+        const payload = {
+          name: document.getElementById('name').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          location: document.getElementById('location').value.trim(),
+          total_experience: document.getElementById('total_experience').value,
+          relevant_experience: document.getElementById('relevant_experience').value,
+          skills: document.getElementById('skills').value.trim(),
+          current_ctc: document.getElementById('current_ctc').value,
+          expected_ctc: document.getElementById('expected_ctc').value
+        };
 
-          formData.append("filename", fileInput.name);
-          formData.append("mimetype", fileInput.type);
-          formData.append("filedata", base64Data);
+        const formData = new FormData();
+        formData.append('filename', f.name);
+        formData.append('mimetype', f.type || 'application/octet-stream');
+        formData.append('filedata', base64);
+        formData.append('data', JSON.stringify(payload));
 
-          formData.append("data", JSON.stringify({
-            name: document.getElementById("name").value,
-            email: document.getElementById("email").value,
-            phone: document.getElementById("phone").value,
-            location: document.getElementById("location").value,
-            total_experience: document.getElementById("total_experience").value,
-            relevant_experience: document.getElementById("relevant_experience").value,
-            skills: document.getElementById("skills").value,
-            current_ctc: document.getElementById("current_ctc").value,
-            expected_ctc: document.getElementById("expected_ctc").value
-          }));
+        // POST to Apps Script
+        const res = await fetch(scriptURL, { method:'POST', body: formData });
+        const json = await res.json();
 
-          const response = await fetch(scriptURL, { method: "POST", body: formData });
-          const result = await response.json();
-
-          if (result.status === "success") {
-            successCheck.style.animation = "check-animate 0.8s ease forwards";
-            setTimeout(() => successCheck.style.animation = "", 1500);
-            document.getElementById("uploadForm").reset();
-          } else {
-            alert("Error: " + result.message);
-          }
-
-        } catch (error) {
-          alert("Upload failed: " + error.message);
+        if(json.status && json.status === 'success'){
+          // show modal with file link (if returned)
+          fileLink.href = json.fileUrl || '#';
+          fileLink.textContent = json.fileUrl ? 'View uploaded resume' : 'Open Resume';
+          openModal();
+          form.reset();
+          previewArea.style.display='none';
+          previewArea.innerHTML='';
+        } else {
+          throw new Error(json.message || 'Server returned an error');
         }
       };
+      reader.onerror = ()=> { throw new Error('Failed to read file'); };
 
-      reader.readAsDataURL(fileInput);
-    });
-  </script>
+    } catch(err){
+      alert('Upload failed: ' + (err.message || err));
+      console.error(err);
+    } finally {
+      submitBtn.removeAttribute('disabled');
+      btnSpinner.style.display = 'none';
+      btnLabel.textContent = '🚀 Submit Application';
+    }
+  });
 
+  // modal funcs
+  window.openModal = function(){
+    modalBackdrop.classList.add('show');
+    modalBackdrop.setAttribute('aria-hidden','false');
+  };
+  window.closeModal = function(){
+    modalBackdrop.classList.remove('show');
+    modalBackdrop.setAttribute('aria-hidden','true');
+  };
+
+  // close modal on backdrop click
+  modalBackdrop.addEventListener('click', function(e){
+    if(e.target === modalBackdrop) closeModal();
+  });
+
+})();
+</script>
 </body>
 </html>
