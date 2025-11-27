@@ -1,66 +1,206 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Upload Resume</title>
+  <style>
+    /* Reset & fonts */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ffffff;
+      color: #0a0a0a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* Container */
+    .container {
+      background-color: #f9f9f9;
+      max-width: 500px;
+      width: 100%;
+      border-radius: 12px;
+      padding: 35px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 28px;
+      font-weight: 600;
+      color: #007BFF; /* Blue heading */
+      letter-spacing: 0.5px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #28a745; /* Green labels */
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="file"] {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #ffffff;
+      color: #0a0a0a;
+      font-size: 15px;
+      transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    .form-group input:focus {
+      border-color: #007BFF;
+      box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+      outline: none;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #ffffff;
+      background: linear-gradient(45deg, #28a745, #007BFF);
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+    }
+
+    button[type="submit"]:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(40, 167, 69, 0.6);
+    }
+
+    /* Success checkmark animation */
+    .success-check {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      font-size: 60px;
+      color: #28a745; /* Green checkmark */
+      opacity: 0;
+      pointer-events: none;
+      animation: none;
+      z-index: 10;
+    }
+
+    @keyframes check-animate {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+      50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 25px;
+      }
+    }
+  </style>
 </head>
 <body>
-<h2>Upload Your Resume</h2>
 
-<form id="uploadForm">
-  <label>Name:</label><br>
-  <input type="text" id="name" required><br><br>
+  <div class="container">
+    <h2>Upload Your Resume</h2>
+    <form id="uploadForm">
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required />
+      </div>
 
-  <label>Email:</label><br>
-  <input type="email" id="email" required><br><br>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" required />
+      </div>
 
-  <label>Phone:</label><br>
-  <input type="text" id="phone" required><br><br>
+      <div class="form-group">
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" required />
+      </div>
 
-  <label>Location:</label><br>
-  <input type="text" id="location" required><br><br>
+      <div class="form-group">
+        <label for="location">Location:</label>
+        <input type="text" id="location" required />
+      </div>
 
-  <label>Upload Resume:</label><br>
-  <input type="file" id="file" required><br><br>
+      <div class="form-group">
+        <label for="file">Upload Resume:</label>
+        <input type="file" id="file" required />
+      </div>
 
-  <button type="submit">Submit</button>
-</form>
+      <button type="submit">Submit</button>
+    </form>
 
-<script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbxvM0RWuXogTAFU8KpapQOw0jcbPPRNYxj9b1vZ4lJoM5FN5kmuzVstDcmtXg4BxEGU/exec";
+    <div class="success-check" id="successCheck">✔</div>
+  </div>
 
-document.getElementById("uploadForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxvM0RWuXogTAFU8KpapQOw0jcbPPRNYxj9b1vZ4lJoM5FN5kmuzVstDcmtXg4BxEGU/exec";
+    const successCheck = document.getElementById('successCheck');
 
-  const fileInput = document.getElementById("file").files[0];
-  const reader = new FileReader();
+    document.getElementById("uploadForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-  reader.onload = async function () {
-    const base64Data = reader.result.split(',')[1];
+      const fileInput = document.getElementById("file").files[0];
+      const reader = new FileReader();
 
-    const formData = new FormData();
-    formData.append("filename", fileInput.name);
-    formData.append("mimetype", fileInput.type);
-    formData.append("filedata", base64Data);
+      reader.onload = async function () {
+        try {
+          const base64Data = reader.result.split(',')[1];
 
-    formData.append("data", JSON.stringify({
-      name: document.getElementById("name").value,
-      email: document.getElementById("email").value,
-      phone: document.getElementById("phone").value,
-      location: document.getElementById("location").value // NEW FIELD
-    }));
+          const formData = new FormData();
+          formData.append("filename", fileInput.name);
+          formData.append("mimetype", fileInput.type);
+          formData.append("filedata", base64Data);
+          formData.append("data", JSON.stringify({
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            location: document.getElementById("location").value
+          }));
 
-    const response = await fetch(scriptURL, {
-      method: "POST",
-      body: formData,
+          const response = await fetch(scriptURL, {
+            method: "POST",
+            body: formData,
+          });
+
+          const result = await response.json();
+          if(result.status === "success"){
+            // Animate success checkmark
+            successCheck.style.animation = 'check-animate 0.8s ease forwards';
+            setTimeout(() => {
+              successCheck.style.animation = '';
+            }, 1500);
+            document.getElementById("uploadForm").reset();
+          } else {
+            alert("Error: " + result.message);
+          }
+        } catch (err) {
+          alert("Submission failed: " + err.message);
+        }
+      };
+
+      reader.readAsDataURL(fileInput);
     });
-
-    const result = await response.json();
-    alert(result.status === "success" ? "Resume submitted successfully!" : "Error: " + result.message);
-  };
-
-  reader.readAsDataURL(fileInput);
-});
-</script>
+  </script>
 
 </body>
 </html>
