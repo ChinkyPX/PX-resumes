@@ -107,6 +107,121 @@ textarea{min-height:54px;resize:vertical;}
   #chooseBtn{width:100%; text-align:center;}
   .file-preview{font-size:13px;}
   .modal{width:95%;padding:16px;}
+  /* --- UNIVERSAL MOBILE FIXES --- */
+
+/* Prevent iPhone Safari zoom on inputs */
+input, textarea {
+  font-size: 16px !important;
+}
+
+/* Main mobile fix */
+@media (max-width: 820px) {
+
+  body {
+    padding: 12px !important;
+  }
+
+  .stage {
+    width: 100%;
+  }
+
+  .hero h1 {
+    font-size: 22px !important;
+  }
+
+  /* Force single column layout */
+  .grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .card {
+    padding: 18px !important;
+    border-radius: 12px;
+  }
+
+  /* Fix input spacing */
+  .input-wrap {
+    padding: 12px !important;
+    min-height: 46px;
+    align-items: center;
+  }
+
+  /* Section title alignment */
+  .section-title {
+    margin-top: 10px;
+    margin-bottom: 6px;
+    font-size: 15px;
+  }
+
+  /* Make file input layout perfect */
+  .field .input-wrap {
+    flex-direction: row !important;
+    justify-content: space-between;
+  }
+
+  /* Browse Button */
+  #chooseBtn {
+    padding: 10px 14px !important;
+    font-size: 14px !important;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+
+  /* Fix file preview box */
+  .file-preview {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    font-size: 14px;
+    padding: 12px !important;
+  }
+
+  .file-meta {
+    flex-wrap: wrap;
+  }
+
+  /* Form button */
+  .btn {
+    font-size: 15px !important;
+    padding: 14px !important;
+    border-radius: 12px;
+  }
+
+  /* Modal fix for small screens */
+  .modal {
+    width: 92% !important;
+    padding: 18px !important;
+    border-radius: 12px;
+  }
+}
+
+/* Extra small devices (older phones, small Android) */
+@media (max-width: 480px) {
+
+  .hero h1 {
+    font-size: 20px !important;
+  }
+
+  .input-wrap {
+    padding: 10px !important;
+  }
+
+  .btn {
+    padding: 12px !important;
+  }
+
+  #chooseBtn {
+    width: 100% !important;
+    margin-top: 8px;
+  }
+
+  /* Stack the file input layout on very small screens */
+  .field .input-wrap {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+}
+
 }
 </style>
 </head>
