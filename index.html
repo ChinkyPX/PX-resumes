@@ -227,7 +227,7 @@ textarea{min-height:54px;resize:vertical;}
       };
       reader.onerror=()=>{ throw new Error('Failed to read file'); };
     }catch(err){ alert('Upload failed: '+err.message); console.error(err); }
-    finally{ submitBtn.removeAttribute('disabled'); btnSpinner.style.display='none'; btnLabel.textContent='🚀 Submit Application'; }
+    finally{ submitBtn.removeAttribute('disabled'); btnSpinner.style.display='none'; btnLabel.textContent='Submit Application'; }
   });
 
   window.openModal = ()=>{modalBackdrop.classList.add('show'); modalBackdrop.setAttribute('aria-hidden','false');};
